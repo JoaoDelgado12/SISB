@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Exportação rápida de CSV no frontend para demonstrar o chamado EVOL-03
+    //FEITO
     const headers = ['ID', 'Livro', 'Leitor', 'Matricula', 'Data Emprestimo', 'Previsao Devolucao', 'Data Devolucao', 'Multa', 'Status'];
     const rows = listaEmprestimos.map(e => [
       e.id,

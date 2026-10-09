@@ -201,13 +201,12 @@ app.post('/api/emprestimos', (req, res) => {
     }
 
     const dataEmp = new Date();
-    const dataPrev = new Date();
+    const dataPrev = new Date(dataEmp);
     dataPrev.setDate(dataEmp.getDate() + parseInt(dias, 10));
-
-    if(dataPrev.getDay() == 0){
-      dataPrev.setDate(dataEmp.getDate() + parseInt(1, 10));
-    }else if(dataPrev.getDay() == 0){
-      dataPrev.setDate(dataEmp.getDate() + parseInt(2, 10));
+    if(dataPrev.getDay() === 0){
+      dataPrev.setDate(dataEmp.getDate() + 1);
+    }else if(dataPrev.getDay() === 6){
+      dataPrev.setDate(dataEmp.getDate() + 2);
     }
 
     // ⚠️ REGRA PARA MANUTENÇÃO ADAPTATIVA (ADAP-01):
@@ -295,6 +294,9 @@ app.post('/api/emprestimos/:id/devolver', (req, res) => {
 // ⚠️ FUNCIONALIDADE PARA MANUTENÇÃO EVOLUTIVA (EVOL-01):
 // Rota de renovação ainda não implementada
 app.post('/api/emprestimos/:id/renovar', (req, res) => {
+  const emprestimoId = req.params.id;
+  
+
   res.status(501).json({
     error: 'Funcionalidade não implementada',
     chamado: 'EVOL-01: Implementação do recurso de Renovação de Empréstimo',
