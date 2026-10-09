@@ -203,11 +203,12 @@ app.post('/api/emprestimos', (req, res) => {
     const dataEmp = new Date();
     const dataPrev = new Date(dataEmp);
     dataPrev.setDate(dataEmp.getDate() + parseInt(dias, 10));
-    if(dataPrev.getDay() === 0){
-      dataPrev.setDate(dataEmp.getDate() + 1);
-    }else if(dataPrev.getDay() === 6){
-      dataPrev.setDate(dataEmp.getDate() + 2);
+    if (dataPrev.getDay() === 0) {
+      dataPrev.setDate(dataPrev.getDate() + 1); // Domingo vira Segunda
+    } else if (dataPrev.getDay() === 6) {
+      dataPrev.setDate(dataPrev.getDate() + 2); // Sábado vira Segunda
     }
+
 
     // ⚠️ REGRA PARA MANUTENÇÃO ADAPTATIVA (ADAP-01):
     // Atualmente o sistema não considera finais de semana (sábado/domingo).
