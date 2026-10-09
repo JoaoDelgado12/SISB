@@ -87,11 +87,17 @@ app.get('/api/livros/:id', (req, res) => {
 // Cadastrar novo livro
 app.post('/api/livros', (req, res) => {
   const { titulo, autor, isbn, categoria, ano_publicacao } = req.body;
+  const anoAtual = new Date().getFullYear();
 
   // ⚠️ FALHA DIDÁTICA (CORR-03): Falta de validação consistente!
   // Permite cadastrar ano negativo, anos futuros absurdos (ex: ano 9999) ou títulos em branco
+  //FEITO
   if (!titulo || !autor) {
     return res.status(400).json({ error: 'Título e Autor são obrigatórios.' });
+  }
+
+  if (ano_publicacao < 0 || ano_publicacao >= anoAtual){
+    return res.status(400).json({ error: 'Ano de publicação inválido.' });
   }
 
   const sql = `
@@ -198,10 +204,17 @@ app.post('/api/emprestimos', (req, res) => {
     const dataPrev = new Date();
     dataPrev.setDate(dataEmp.getDate() + parseInt(dias, 10));
 
+    if(dataPrev.getDay() == 0){
+      dataPrev.setDate(dataEmp.getDate() + parseInt(1, 10));
+    }else if(dataPrev.getDay() == 0){
+      dataPrev.setDate(dataEmp.getDate() + parseInt(2, 10));
+    }
+
     // ⚠️ REGRA PARA MANUTENÇÃO ADAPTATIVA (ADAP-01):
     // Atualmente o sistema não considera finais de semana (sábado/domingo).
     // O chamado de manutenção adaptativa solicitará que se a data de devolução cair em fim de semana,
     // seja ajustada para a próxima segunda-feira útil!
+    //FEITO
 
     const dataEmpStr = dataEmp.toISOString().split('T')[0];
     const dataPrevStr = dataPrev.toISOString().split('T')[0];
