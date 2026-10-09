@@ -1,0 +1,1 @@
+No arquivo server.js a variável 'taxaFixaProcessamento' está como string como correção tira de string e deixar como number.
