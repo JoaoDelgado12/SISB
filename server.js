@@ -60,9 +60,10 @@ app.get('/api/livros', (req, res) => {
   if (termo) {
     // ⚠️ VULNERABILIDADE DIDÁTICA (PREV-01): Interpolação direta suscetível a SQL Injection!
     // Exercício de Manutenção Preventiva: os alunos devem refatorar para prepared statement parametrizado (?, ?, ?)
-    const sqlVulneravel = `SELECT * FROM livros WHERE titulo LIKE '%${termo}%' OR autor LIKE '%${termo}%' OR categoria LIKE '%${termo}%' ORDER BY id DESC`;
+    //FEITO
+    const sqlVulneravel = `SELECT * FROM livros WHERE titulo LIKE ? OR autor LIKE ? OR categoria LIKE ? ORDER BY id DESC`;
     
-    db.all(sqlVulneravel, (err, rows) => {
+    db.all(sqlVulneravel, [], (err, rows) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json(rows);
     });
@@ -243,9 +244,6 @@ app.post('/api/emprestimos/:id/devolver', (req, res) => {
       return res.status(400).json({ error: 'Este empréstimo já foi finalizado anteriormente.' });
     }
 
-    // ⚠️ BUG DIDÁTICO INTENCIONAL (CORR-01): Cálculo incorreto da multa por concatenação de String!
-    // A taxa base é do tipo String ("5.00"). Ao somar com a taxa por dia, resulta em "5.0010" em vez de 15.00!
-    // Além disso, há problemas com datas sem truncamento correto.
     let valorMulta = 0;
     const dataPrev = new Date(emp.data_prevista_devolucao + 'T00:00:00');
     const dataAtual = new Date(hoje + 'T00:00:00');
@@ -254,9 +252,8 @@ app.post('/api/emprestimos/:id/devolver', (req, res) => {
     const diasAtraso = Math.ceil(diffTempo / (1000 * 60 * 60 * 24));
 
     if (diasAtraso > 0) {
-      const taxaFixaProcessamento = "5.00"; // <-- STRING! ERRO PROPITAL
+      const taxaFixaProcessamento = 5.00;
       const taxaDiaria = 2.00;
-      // Erro: Concatena a string "5.00" com o cálculo de (diasAtraso * 2.00)
       valorMulta = taxaFixaProcessamento + (diasAtraso * taxaDiaria); 
     }
 
@@ -270,11 +267,8 @@ app.post('/api/emprestimos/:id/devolver', (req, res) => {
     db.run(sqlFinaliza, [hoje, valorMulta, emprestimoId], (errFinaliza) => {
       if (errFinaliza) return res.status(500).json({ error: errFinaliza.message });
 
+    db.run("UPDATE livros SET status = 'disponivel' WHERE id = ?", [emp.livro])
 
-      // ⚠️ BUG DIDÁTICO INTENCIONAL (CORR-02):
-      // O desenvolvedor original ESQUECEU de atualizar a tabela 'livros' de volta para 'disponivel'!
-      // db.run("UPDATE livros SET status = 'disponivel' WHERE id = ?", [emp.livro_id]); <-- COMENTADO PROPOSITADAMENTE!
-      
       res.json({
         mensagem: 'Livro devolvido com sucesso.',
         diasAtraso: diasAtraso > 0 ? diasAtraso : 0,
@@ -300,6 +294,7 @@ app.listen(PORT, () => {
   console.log('====================================================');
   console.log(`🚀 SISB - Sistema de Biblioteca em execução!`);
   console.log(`📡 URL Local: http://localhost:${PORT}`);
-  console.log(`📚 Disciplina: Manutenção de Sistemas - SENAI CIMATEC`);
+  console.log(`📚 Disciplina: Manutenção de Sistemas - Teste de Sistemas`);
+  console.log(`👨‍🏫 Professor: ALLAN ALMEIDA SANTOS`);
   console.log('====================================================');
 });
