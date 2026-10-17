@@ -34,15 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // Chamada à API pública da Open Library (exercício de Manutenção Adaptativa)
-      const res = await fetch(`https://openlibrary.org/isbn/${isbn}.json`);
+      const res = await fetch(`https://openlibrary.org/search.json?q=${isbn}`);
       if (!res.ok) throw new Error('Livro não localizado na base Open Library.');
       const data = await res.json();
 
-      document.getElementById('livro-titulo').value = data.title || '';
+      document.getElementById('livro-titulo').value = data.docs[0].title || '';
+      document.getElementById('livro-autor').value = data.docs[0].author_name[0] || '';
+      document.getElementById('livro-ano').value = data.docs[0].first_publish_year || '';
       
       // Se houver ano de publicação
-      if (data.publish_date) {
-        const ano = data.publish_date.match(/\d{4}/);
+      if (data.first_publish_year) {
+        const ano = data.first_publish_year.match(/\d{4}/);
         if (ano) document.getElementById('livro-ano').value = ano[0];
       }
 
