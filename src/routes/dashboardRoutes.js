@@ -1,8 +1,9 @@
 const express = require('express');
 const dashboardRouter = express.Router();
-const dashboardController = require('../../js/model/apiModel');
 
-dashboardRouter.get('/api/estatisticas', dashboardController.getEstatisticas);
-dashboardRouter.get('/api/emprestimos', dashboardController.getEmprestimos);
+const DashboardController = require('../controller/server');
+
+dashboardRouter.get('/api/estatisticas', DashboardController.getEstatisticas);
+dashboardRouter.get('/api/emprestimos', DashboardController.getEmprestimos);
 
 module.exports = dashboardRouter;

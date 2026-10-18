@@ -1,7 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('../../database/db');
+
+// 1. IMPORTA OS SEUS ROUTERS SEPARADOS (que vão ficar na pasta routes)
+const estatisticaRoutes = require('../routes/estatisticaRoutes');
+const livroRoutes = require('../routes/livroRoutes');
+const usuarioRoutes = require('../routes/usuarioRoutes');
+const emprestimoRoutes = require('../routes/emprestimoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +16,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../../public')));
+
+
+app.use(estatisticaRoutes);
+app.use(livroRoutes);
+app.use(usuarioRoutes);
+app.use(emprestimoRoutes);
 
 // Helper de for  matação de datas (YYYY-MM-DD)
 const hojeFormatado = () => new Date().toISOString().split('T')[0];
@@ -280,7 +291,7 @@ app.post('/api/emprestimos/:id/devolver', (req, res) => {
     db.run(sqlFinaliza, [hoje, valorMulta, emprestimoId], (errFinaliza) => {
       if (errFinaliza) return res.status(500).json({ error: errFinaliza.message });
 
-    db.run("UPDATE livros SET status = 'disponivel' WHERE id = ?", [emp.livro])
+    db.run("UPDATE livros SET status = 'disponivel' WHERE id = ?", [emp.livro_id])
 
       res.json({
         mensagem: 'Livro devolvido com sucesso.',
