@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('./database/db');
+const db = require('../../database/db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,9 +10,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../../public')));
 
-// Helper de formatação de datas (YYYY-MM-DD)
+// Helper de for  matação de datas (YYYY-MM-DD)
 const hojeFormatado = () => new Date().toISOString().split('T')[0];
 
 // ==========================================
@@ -91,7 +91,7 @@ app.post('/api/livros', (req, res) => {
 
   // ⚠️ FALHA DIDÁTICA (CORR-03): Falta de validação consistente!
   // Permite cadastrar ano negativo, anos futuros absurdos (ex: ano 9999) ou títulos em branco
-  //FEITO
+  // FEITO
   if (!titulo || !autor) {
     return res.status(400).json({ error: 'Título e Autor são obrigatórios.' });
   }
@@ -214,7 +214,7 @@ app.post('/api/emprestimos', (req, res) => {
     // Atualmente o sistema não considera finais de semana (sábado/domingo).
     // O chamado de manutenção adaptativa solicitará que se a data de devolução cair em fim de semana,
     // seja ajustada para a próxima segunda-feira útil!
-    //FEITO
+    // FEITO
 
     const dataEmpStr = dataEmp.toISOString().split('T')[0];
     const dataPrevStr = dataPrev.toISOString().split('T')[0];

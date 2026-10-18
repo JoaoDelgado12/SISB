@@ -1,5 +1,3 @@
-// api.js - Módulo de comunicação com a API do SISB
-
 const API = {
   // Livros
   async getLivros(busca = '') {

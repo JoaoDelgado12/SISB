@@ -2,9 +2,9 @@
   "name": "sisb-sistema-biblioteca",
   "version": "1.0.0",
   "description": "SISB - Sistema de Informação de Biblioteca (Projeto de Manutenção de Sistemas - SENAI CIMATEC)",
-  "main": "server.js",
+  "main": "./src/controller/server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node ./src/controller/server.js",
     "seed": "node database/seed.js",
     "test": "node --test"
   },

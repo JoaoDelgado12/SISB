@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Botão de busca por ISBN (Exercício ADAP-02)
+  // FEITO
   const btnIsbn = document.getElementById('btn-buscar-isbn');
   btnIsbn.addEventListener('click', async () => {
     const isbn = document.getElementById('livro-isbn').value.trim().replace(/[-\s]/g, '');
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // Chamada à API pública da Open Library (exercício de Manutenção Adaptativa)
+      // FEITO
       const res = await fetch(`https://openlibrary.org/search.json?q=${isbn}`);
       if (!res.ok) throw new Error('Livro não localizado na base Open Library.');
       const data = await res.json();

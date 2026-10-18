@@ -1,5 +1,3 @@
-// emprestimos.js - Lógica da gestão de empréstimos e devoluções
-
 let listaEmprestimos = [];
 let filtroAtual = 'todos';
 
@@ -128,6 +126,7 @@ function renderizarTabela() {
     `;
   }).join('');
 }
+
 
 async function abrirModalNovoEmprestimo() {
   try {
